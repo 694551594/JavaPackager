@@ -12,7 +12,7 @@ plugins {
 repositories {
 	mavenLocal()
 	mavenCentral()
-	maven { 
+	maven {
 		url 'https://plugins.gradle.org/m2/'
 	}
 }
@@ -79,11 +79,18 @@ targetCompatibility = JavaVersion.VERSION_1_8
 compileJava.options.encoding = 'UTF-8'
 
 publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			from(components.java)
+	repositories{
+		mavenLocal()
+		maven {
+			def localMavenRepo = 'file://' + new File('E:\\maven\\repository').getPath()
+			url = localMavenRepo
 		}
 	}
+//	publications {
+//		mavenJava(MavenPublication) {
+//			from(components.java)
+//		}
+//	}
 }
 
 install.repositories.mavenInstaller.pom.with {

@@ -61,6 +61,7 @@ public class VelocityUtils {
 
 	public static void setAssetsDir(File assetsDir) {
 		VelocityUtils.assetsDir = assetsDir;
+		Logger.info("assetsDir " + assetsDir.toString());
 	}
 
 	public static void render(String templatePath, File output, Object info) throws Exception {

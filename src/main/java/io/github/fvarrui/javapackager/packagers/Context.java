@@ -28,7 +28,8 @@ public abstract class Context<T> {
 		getInstallerGenerators(Platform.windows).add(new GenerateSetup());
 		getInstallerGenerators(Platform.windows).add(new GenerateMsm());
 		getInstallerGenerators(Platform.windows).add(new GenerateMsi());
-		
+		getInstallerGenerators(Platform.linux).add(new GenerateUosDeb());
+
 	}
 	
 	// common properties

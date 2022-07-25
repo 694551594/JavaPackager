@@ -15,6 +15,7 @@ public class LinuxConfig implements Serializable {
 
 	private List<String> categories;
 	private boolean generateDeb = true;
+	private boolean generateUosDeb = true;
 	private boolean generateRpm = true;
 	private boolean generateAppImage = true;
 	private File pngFile;
@@ -30,6 +31,10 @@ public class LinuxConfig implements Serializable {
 
 	public boolean isGenerateDeb() {
 		return generateDeb;
+	}
+
+	public boolean isGenerateUosDeb() {
+		return generateUosDeb;
 	}
 
 	public void setGenerateDeb(boolean generateDeb) {
