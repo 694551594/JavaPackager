@@ -4,6 +4,7 @@ import io.github.fvarrui.javapackager.utils.FileUtils;
 import io.github.fvarrui.javapackager.utils.Logger;
 import io.github.fvarrui.javapackager.utils.VelocityUtils;
 import org.apache.commons.compress.archivers.zip.UnixStat;
+import org.apache.commons.io.FilenameUtils;
 import org.vafer.jdeb.Console;
 import org.vafer.jdeb.DataProducer;
 import org.vafer.jdeb.DebMaker;
@@ -88,13 +89,13 @@ public class GeneratekylinDeb extends ArtifactGenerator<LinuxPackager> {
         appLibsFolder.mkdirs();
         File[] libFiles = libsFolder.listFiles();
         for (File libFile : libFiles) {
-            if (libFile.getName().contains("-win") && !arch.equals("win")) {
+            if (!arch.equals("win") && FilenameUtils.getBaseName(libFile.getName()).endsWith("-win")) {
                 continue;
             }
-            if (libFile.getName().contains("-linux") && !arch.equals("linux")) {
+            if (!arch.equals("linux") && FilenameUtils.getBaseName(libFile.getName()).endsWith("-linux")) {
                 continue;
             }
-            if (libFile.getName().contains("-linux-aarch64") && !arch.equals("linux-aarch64")) {
+            if (!arch.equals("linux-aarch64") && FilenameUtils.getBaseName(libFile.getName()).endsWith("-linux-aarch64")) {
                 continue;
             }
             FileUtils.copyFileToFolder(libFile, appLibsFolder);

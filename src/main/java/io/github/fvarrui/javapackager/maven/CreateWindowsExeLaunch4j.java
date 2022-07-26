@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.twdata.maven.mojoexecutor.MojoExecutor.Element;
 
@@ -59,13 +60,13 @@ public class CreateWindowsExeLaunch4j extends AbstractCreateWindowsExe {
 		appLibsFolder.mkdirs();
 		File[] libFiles = libsFolder.listFiles();
 		for (File libFile : libFiles) {
-			if (libFile.getName().contains("-win") && !arch.equals("win")) {
+			if (!arch.equals("win") && FilenameUtils.getBaseName(libFile.getName()).endsWith("-win")) {
 				continue;
 			}
-			if (libFile.getName().contains("-linux") && !arch.equals("linux")) {
+			if (!arch.equals("linux") && FilenameUtils.getBaseName(libFile.getName()).endsWith("-linux")) {
 				continue;
 			}
-			if (libFile.getName().contains("-linux-aarch64") && !arch.equals("linux-aarch64")) {
+			if (!arch.equals("linux-aarch64") && FilenameUtils.getBaseName(libFile.getName()).endsWith("-linux-aarch64")) {
 				continue;
 			}
 			FileUtils.copyFileToFolder(libFile, appLibsFolder);
