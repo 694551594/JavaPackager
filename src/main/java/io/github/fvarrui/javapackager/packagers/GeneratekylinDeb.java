@@ -120,7 +120,7 @@ public class GeneratekylinDeb extends ArtifactGenerator<LinuxPackager> {
 
         Mapper executableMapper = new Mapper();
         executableMapper.setType("perm");
-        executableMapper.setPrefix("/opt/" + name);
+        executableMapper.setPrefix("/opt/apps/" + name);
         executableMapper.setFileMode("755");
 
         Data executableData = new Data();
@@ -150,7 +150,7 @@ public class GeneratekylinDeb extends ArtifactGenerator<LinuxPackager> {
             Mapper javaBinaryMapper = new Mapper();
             javaBinaryMapper.setType("perm");
             javaBinaryMapper.setFileMode("755");
-            javaBinaryMapper.setPrefix("/opt/" + name + "/" + jreDirectoryName + "/bin");
+            javaBinaryMapper.setPrefix("/opt/apps/" + name + "/" + jreDirectoryName + "/bin");
 
             Data javaBinaryData = new Data();
             javaBinaryData.setType("file");
@@ -163,7 +163,7 @@ public class GeneratekylinDeb extends ArtifactGenerator<LinuxPackager> {
             Mapper javaSpawnHelperMapper = new Mapper();
             javaSpawnHelperMapper.setType("perm");
             javaSpawnHelperMapper.setFileMode("755");
-            javaSpawnHelperMapper.setPrefix("/opt/" + name + "/" + jreDirectoryName + "/lib");
+            javaSpawnHelperMapper.setPrefix("/opt/apps/" + name + "/" + jreDirectoryName + "/lib");
 
             File jSpawnHelperFile = new File(appFolder, jreDirectoryName + "/lib/jspawnhelper");
 
@@ -178,7 +178,7 @@ public class GeneratekylinDeb extends ArtifactGenerator<LinuxPackager> {
 
         // symbolic link in /usr/local/bin to app binary data producer
 
-        DataProducer linkData = createLink("/usr/local/bin/" + name, "/opt/" + name + "/" + name);
+        DataProducer linkData = createLink("/usr/local/bin/" + name, "/opt/apps/" + name + "/" + name);
 
         dataProducers.add(linkData);
 
