@@ -314,6 +314,9 @@ public class PackageMojo extends AbstractMojo {
 	 */
 	@Parameter(property = "scripts", required = false)
 	private Scripts scripts;
+
+	@Parameter(property = "arch", required = false)
+	private String arch;
 	
 	public void execute() throws MojoExecutionException {
 		
@@ -370,6 +373,7 @@ public class PackageMojo extends AbstractMojo {
 						.url(url)
 						.version(version)
 						.vmArgs(vmArgs)
+						.arch(arch)
 						.winConfig(winConfig);
 			
 			// generate app, installers and bundles

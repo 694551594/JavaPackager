@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.github.fvarrui.javapackager.utils.FileUtils;
 import org.apache.commons.compress.archivers.zip.UnixStat;
 import org.vafer.jdeb.Console;
 import org.vafer.jdeb.DataProducer;
@@ -53,7 +54,7 @@ public class GenerateDeb extends ArtifactGenerator<LinuxPackager> {
 	
 	@Override
 	protected File doApply(LinuxPackager packager) throws Exception {
-		
+		String arch = packager.getArch();
 		File assetsFolder = packager.getAssetsFolder();
 		String name = packager.getName();
 		File appFolder = packager.getAppFolder();
@@ -80,7 +81,29 @@ public class GenerateDeb extends ArtifactGenerator<LinuxPackager> {
 		// create data producers collections
 		
 		List<DataProducer> conffilesProducers = new ArrayList<>();		
-		List<DataProducer> dataProducers = new ArrayList<>();		
+		List<DataProducer> dataProducers = new ArrayList<>();
+
+		File proguardFolder = new File(appFolder.getParentFile().getParentFile(), "outlibs");
+		File[] proguardFiles = proguardFolder.listFiles();
+		File libsFolder = new File(appFolder.getParentFile(), "libs");
+		for (File proguardFile : proguardFiles) {
+			FileUtils.copyFileToFolder(proguardFile, libsFolder);
+		}
+		File appLibsFolder = new File(appFolder, "libs");
+		appLibsFolder.mkdirs();
+		File[] libFiles = libsFolder.listFiles();
+		for (File libFile : libFiles) {
+			if (libFile.getName().contains("-win") && !arch.equals("win")) {
+				continue;
+			}
+			if (libFile.getName().contains("-linux") && !arch.equals("linux")) {
+				continue;
+			}
+			if (libFile.getName().contains("-linux-aarch64") && !arch.equals("linux-aarch64")) {
+				continue;
+			}
+			FileUtils.copyFileToFolder(libFile, appLibsFolder);
+		}
 		
 		// builds app folder data producer, except executable file and jre/bin/java
 		

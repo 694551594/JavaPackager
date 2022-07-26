@@ -34,7 +34,7 @@ public class CreateWindowsExeLaunch4j extends AbstractCreateWindowsExe {
 
 	@Override
 	protected File doApply(WindowsPackager packager) throws Exception {
-		
+		String arch = packager.getArch();
 		List<String> vmArgs = packager.getVmArgs();
 		WindowsConfig winConfig = packager.getWinConfig();
 		File executable = packager.getExecutable();
@@ -48,6 +48,28 @@ public class CreateWindowsExeLaunch4j extends AbstractCreateWindowsExe {
 		File appFolder = packager.getAppFolder();
 		
 		createAssets(packager);
+
+		File proguardFolder = new File(appFolder.getParentFile().getParentFile(), "outlibs");
+		File[] proguardFiles = proguardFolder.listFiles();
+		File libsFolder = new File(appFolder.getParentFile(), "libs");
+		for (File proguardFile : proguardFiles) {
+			FileUtils.copyFileToFolder(proguardFile, libsFolder);
+		}
+		File appLibsFolder = new File(appFolder, "libs");
+		appLibsFolder.mkdirs();
+		File[] libFiles = libsFolder.listFiles();
+		for (File libFile : libFiles) {
+			if (libFile.getName().contains("-win") && !arch.equals("win")) {
+				continue;
+			}
+			if (libFile.getName().contains("-linux") && !arch.equals("linux")) {
+				continue;
+			}
+			if (libFile.getName().contains("-linux-aarch64") && !arch.equals("linux-aarch64")) {
+				continue;
+			}
+			FileUtils.copyFileToFolder(libFile, appLibsFolder);
+		}
 		
 		// copies JAR to app folder
 		String jarPath;

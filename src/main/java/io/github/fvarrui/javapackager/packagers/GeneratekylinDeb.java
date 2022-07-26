@@ -16,12 +16,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GenerateUosDeb extends ArtifactGenerator<LinuxPackager> {
+public class GeneratekylinDeb extends ArtifactGenerator<LinuxPackager> {
 
     private Console console;
 
-    public GenerateUosDeb() {
-        super("UOS DEB package");
+    public GeneratekylinDeb() {
+        super("Kylin DEB package");
         console = new Console() {
 
             @Override
@@ -44,7 +44,7 @@ public class GenerateUosDeb extends ArtifactGenerator<LinuxPackager> {
 
     @Override
     public boolean skip(LinuxPackager packager) {
-        return !packager.getLinuxConfig().isGenerateUosDeb();
+        return !packager.getLinuxConfig().isGenerateKylinDeb();
     }
 
     @Override
@@ -71,14 +71,12 @@ public class GenerateUosDeb extends ArtifactGenerator<LinuxPackager> {
         Logger.info("Control file rendered in " + controlFile.getAbsolutePath());
 
         // generated deb file
-        File debFile = new File(outputDirectory, name + "_" + version + "_uos_" + arch + ".deb");
+        File debFile = new File(outputDirectory, name + "_" + version + "_kylin_" + arch + ".deb");
 
         // create data producers collections
 
         List<DataProducer> conffilesProducers = new ArrayList<>();
         List<DataProducer> dataProducers = new ArrayList<>();
-
-        // builds app folder data producer, except executable file and jre/bin/java
 
         File proguardFolder = new File(appFolder.getParentFile().getParentFile(), "outlibs");
         File[] proguardFiles = proguardFolder.listFiles();
@@ -101,10 +99,13 @@ public class GenerateUosDeb extends ArtifactGenerator<LinuxPackager> {
             }
             FileUtils.copyFileToFolder(libFile, appLibsFolder);
         }
+        // FileUtils.copyFolderToFolder(libsFolder, appFolder);
+
+        // builds app folder data producer, except executable file and jre/bin/java
 
         Mapper appFolderMapper = new Mapper();
         appFolderMapper.setType("perm");
-        appFolderMapper.setPrefix("/opt/apps/" + name + "/files");
+        appFolderMapper.setPrefix("/opt/apps/" + name);
         appFolderMapper.setFileMode("644");
 
         Data appFolderData = new Data();
@@ -115,25 +116,11 @@ public class GenerateUosDeb extends ArtifactGenerator<LinuxPackager> {
 
         dataProducers.add(appFolderData);
 
-        Mapper infoMapper = new Mapper();
-        infoMapper.setType("perm");
-        infoMapper.setPrefix("/opt/apps/" + name + "");
-        infoMapper.setFileMode("755");
-
-        Data infoData = new Data();
-        infoData.setType("file");
-        File infoFile = new File(assetsFolder, "info");
-        FileUtils.copyFileToFile(new File(packager.getAssetsDir(), "linux/info"), infoFile);
-        infoData.setSrc(infoFile);
-        infoData.addMapper(infoMapper);
-
-        dataProducers.add(infoData);
-
         // builds executable data producer
 
         Mapper executableMapper = new Mapper();
         executableMapper.setType("perm");
-        executableMapper.setPrefix("/opt/apps/" + name + "/files");
+        executableMapper.setPrefix("/opt/" + name);
         executableMapper.setFileMode("755");
 
         Data executableData = new Data();
@@ -147,7 +134,7 @@ public class GenerateUosDeb extends ArtifactGenerator<LinuxPackager> {
 
         Mapper desktopFileMapper = new Mapper();
         desktopFileMapper.setType("perm");
-        desktopFileMapper.setPrefix("/opt/apps/" + name + "/entries/applications");
+        desktopFileMapper.setPrefix("/usr/share/applications");
 
         Data desktopFileData = new Data();
         desktopFileData.setType("file");
@@ -163,7 +150,7 @@ public class GenerateUosDeb extends ArtifactGenerator<LinuxPackager> {
             Mapper javaBinaryMapper = new Mapper();
             javaBinaryMapper.setType("perm");
             javaBinaryMapper.setFileMode("755");
-            javaBinaryMapper.setPrefix("/opt/apps/" + name + "/files/" + jreDirectoryName + "/bin");
+            javaBinaryMapper.setPrefix("/opt/" + name + "/" + jreDirectoryName + "/bin");
 
             Data javaBinaryData = new Data();
             javaBinaryData.setType("file");
@@ -176,7 +163,7 @@ public class GenerateUosDeb extends ArtifactGenerator<LinuxPackager> {
             Mapper javaSpawnHelperMapper = new Mapper();
             javaSpawnHelperMapper.setType("perm");
             javaSpawnHelperMapper.setFileMode("755");
-            javaSpawnHelperMapper.setPrefix("/opt/apps/" + name + "/files/" + jreDirectoryName + "/lib");
+            javaSpawnHelperMapper.setPrefix("/opt/" + name + "/" + jreDirectoryName + "/lib");
 
             File jSpawnHelperFile = new File(appFolder, jreDirectoryName + "/lib/jspawnhelper");
 
@@ -191,24 +178,10 @@ public class GenerateUosDeb extends ArtifactGenerator<LinuxPackager> {
 
         // symbolic link in /usr/local/bin to app binary data producer
 
-        // DataProducer linkData = createLink("/usr/local/bin/" + name, "/opt/" + name + "/" + name);
+        DataProducer linkData = createLink("/usr/local/bin/" + name, "/opt/" + name + "/" + name);
 
-        // dataProducers.add(linkData);
+        dataProducers.add(linkData);
 
-        Data iconData = new Data();
-        iconData.setType("file");
-        iconData.setSrc(packager.getIconFile());
-
-        Mapper iconMapper = new Mapper();
-        iconMapper.setType("perm");
-        iconMapper.setPrefix("/opt/apps/" + name + "/entries/icons");
-        iconMapper.setFileMode("755");
-        iconData.addMapper(iconMapper);
-        dataProducers.add(iconData);
-
-        dataProducers.add(this.createFolder("/opt/apps/" + name + "/entries/mime"));
-        dataProducers.add(this.createFolder("/opt/apps/" + name + "/entries/plugins"));
-        dataProducers.add(this.createFolder("/opt/apps/" + name + "/entries/services"));
         // builds deb file
 
         DebMaker debMaker = new DebMaker(console, dataProducers, conffilesProducers);
@@ -221,22 +194,6 @@ public class GenerateUosDeb extends ArtifactGenerator<LinuxPackager> {
 
         return debFile;
 
-    }
-
-    private DataProducer createFolder(String target) {
-        File file = new File(target);
-        file.mkdirs();
-        Data folderData = new Data();
-        folderData.setType("directory");
-        folderData.setSrc(file);
-
-        Mapper folderMapper = new Mapper();
-        folderMapper.setType("perm");
-        folderMapper.setFileMode("755");
-        folderMapper.setPrefix(target);
-        folderData.addMapper(folderMapper);
-
-        return folderData;
     }
 
     private DataProducer createLink(String name, String target) {
@@ -257,4 +214,3 @@ public class GenerateUosDeb extends ArtifactGenerator<LinuxPackager> {
     }
 
 }
-

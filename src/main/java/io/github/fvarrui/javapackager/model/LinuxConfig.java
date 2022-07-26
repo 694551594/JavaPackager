@@ -16,6 +16,7 @@ public class LinuxConfig implements Serializable {
 	private List<String> categories;
 	private boolean generateDeb = true;
 	private boolean generateUosDeb = true;
+	private boolean generateKylinDeb = true;
 	private boolean generateRpm = true;
 	private boolean generateAppImage = true;
 	private File pngFile;
@@ -27,6 +28,10 @@ public class LinuxConfig implements Serializable {
 	
 	public List<String> getCategories() {
 		return categories;
+	}
+
+	public boolean isGenerateKylinDeb() {
+		return generateKylinDeb;
 	}
 
 	public boolean isGenerateDeb() {

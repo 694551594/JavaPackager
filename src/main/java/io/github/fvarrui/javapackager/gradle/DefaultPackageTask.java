@@ -58,7 +58,8 @@ public class DefaultPackageTask extends AbstractPackageTask {
 					.url(extension.getUrl())
 					.version(defaultIfNull(extension.getVersion(), getProject().getVersion().toString()))
 					.vmArgs(extension.getVmArgs())
-					.winConfig(extension.getWinConfig());
+					.winConfig(extension.getWinConfig())
+					.arch(extension.getArch());
 
 	}
 	

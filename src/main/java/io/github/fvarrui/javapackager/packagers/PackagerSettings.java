@@ -44,6 +44,7 @@ public class PackagerSettings {
 	protected List<String> modules;
 	protected List<String> additionalModules;
 	protected Platform platform;
+	protected String arch;
 	protected String envPath;
 	protected List<String> vmArgs;
 	protected File runnableJar;
@@ -64,6 +65,10 @@ public class PackagerSettings {
 	protected List<FileAssociation> fileAssociations;
 	protected File packagingJdk;
 	protected Scripts scripts;
+
+	public String getArch() {
+		return arch;
+	}
 
 	/**
 	 * Get packaging JDK
@@ -480,6 +485,12 @@ public class PackagerSettings {
 		this.mainClass = mainClass;
 		return this;
 	}
+
+	public PackagerSettings arch(String arch) {
+		this.arch = arch;
+		return this;
+	}
+
 
 	/**
 	 * Set name
