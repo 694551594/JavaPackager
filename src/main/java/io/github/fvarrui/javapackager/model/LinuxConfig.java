@@ -21,7 +21,25 @@ public class LinuxConfig implements Serializable {
 	private boolean generateAppImage = true;
 	private File pngFile;
 	private boolean wrapJar = true;
-	
+	private String desktopFile = "desktop.vtl";
+	private String controlFile = "control.vtl";
+
+	public String getDesktopFile() {
+		return desktopFile;
+	}
+
+	public void setDesktopFile(String desktopFile) {
+		this.desktopFile = desktopFile;
+	}
+
+	public String getControlFile() {
+		return controlFile;
+	}
+
+	public void setControlFile(String controlFile) {
+		this.controlFile = controlFile;
+	}
+
 	public void setCategories(List<String> categories) {
 		this.categories = categories;
 	}

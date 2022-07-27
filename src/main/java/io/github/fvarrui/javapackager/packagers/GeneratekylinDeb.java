@@ -63,12 +63,12 @@ public class GeneratekylinDeb extends ArtifactGenerator<LinuxPackager> {
 
         // generates desktop file from velocity template
         File desktopFile = new File(assetsFolder, name + ".desktop");
-        VelocityUtils.render("linux/desktop.vtl", desktopFile, packager);
+        VelocityUtils.render("linux/" + packager.getLinuxConfig().getDesktopFile(), desktopFile, packager);
         Logger.info("Desktop file rendered in " + desktopFile.getAbsolutePath());
 
         // generates deb control file from velocity template
         File controlFile = new File(assetsFolder, "control");
-        VelocityUtils.render("linux/control.vtl", controlFile, packager);
+        VelocityUtils.render("linux/" + packager.getLinuxConfig().getControlFile(), controlFile, packager);
         Logger.info("Control file rendered in " + controlFile.getAbsolutePath());
 
         // generated deb file
