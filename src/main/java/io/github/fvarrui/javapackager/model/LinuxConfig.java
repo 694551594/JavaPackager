@@ -23,6 +23,15 @@ public class LinuxConfig implements Serializable {
 	private boolean wrapJar = true;
 	private String desktopFile = "desktop.vtl";
 	private String controlFile = "control.vtl";
+	private String infoFile = "info";
+
+	public String getInfoFile() {
+		return infoFile;
+	}
+
+	public void setInfoFile(String infoFile) {
+		this.infoFile = infoFile;
+	}
 
 	public String getDesktopFile() {
 		return desktopFile;

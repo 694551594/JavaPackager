@@ -67,12 +67,14 @@ public class GenerateUosDeb extends ArtifactGenerator<LinuxPackager> {
         Logger.info("Desktop file rendered in " + desktopFile.getAbsolutePath());
 
         // generates deb control file from velocity template
-        File controlFile = new File(assetsFolder, "control");
+        File controlFileFolder = new File(assetsFolder, "control");
+        controlFileFolder.mkdirs();
+        File controlFile = new File(controlFileFolder, "control");
         VelocityUtils.render("linux/" + packager.getLinuxConfig().getControlFile(), controlFile, packager);
         Logger.info("Control file rendered in " + controlFile.getAbsolutePath());
 
         // generated deb file
-        File debFile = new File(outputDirectory, name + "_" + version + "_uos_" + arch + ".deb");
+        File debFile = new File(outputDirectory, name + "_" + version + "_" + arch + ".deb");
 
         // create data producers collections
 
@@ -94,10 +96,10 @@ public class GenerateUosDeb extends ArtifactGenerator<LinuxPackager> {
             if (!arch.equals("win") && FilenameUtils.getBaseName(libFile.getName()).endsWith("-win")) {
                 continue;
             }
-            if (!arch.equals("linux") && FilenameUtils.getBaseName(libFile.getName()).endsWith("-linux")) {
+            if (!arch.equals("amd64") && FilenameUtils.getBaseName(libFile.getName()).endsWith("-linux")) {
                 continue;
             }
-            if (!arch.equals("linux-aarch64") && FilenameUtils.getBaseName(libFile.getName()).endsWith("-linux-aarch64")) {
+            if (!arch.equals("arm64") && FilenameUtils.getBaseName(libFile.getName()).endsWith("-linux-aarch64")) {
                 continue;
             }
             FileUtils.copyFileToFolder(libFile, appLibsFolder);
@@ -123,8 +125,8 @@ public class GenerateUosDeb extends ArtifactGenerator<LinuxPackager> {
 
         Data infoData = new Data();
         infoData.setType("file");
-        File infoFile = new File(assetsFolder, "info");
-        FileUtils.copyFileToFile(new File(packager.getAssetsDir(), "linux/info"), infoFile);
+        File infoFile = new File(assetsFolder, "linux/info");
+        FileUtils.copyFileToFile(new File(packager.getAssetsDir(), "linux/" + packager.getLinuxConfig().getInfoFile()), infoFile);
         infoData.setSrc(infoFile);
         infoData.addMapper(infoMapper);
 
