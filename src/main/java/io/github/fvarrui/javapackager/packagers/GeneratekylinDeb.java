@@ -72,7 +72,7 @@ public class GeneratekylinDeb extends ArtifactGenerator<LinuxPackager> {
         Logger.info("Control file rendered in " + controlFile.getAbsolutePath());
 
         // generated deb file
-        File debFile = new File(outputDirectory, name + "_" + version + "_kylin_" + arch + ".deb");
+        File debFile = new File(outputDirectory, name + "_" + version + "_" + arch + ".deb");
 
         // create data producers collections
 
@@ -92,10 +92,10 @@ public class GeneratekylinDeb extends ArtifactGenerator<LinuxPackager> {
             if (!arch.equals("win") && FilenameUtils.getBaseName(libFile.getName()).endsWith("-win")) {
                 continue;
             }
-            if (!arch.equals("linux") && FilenameUtils.getBaseName(libFile.getName()).endsWith("-linux")) {
+            if (!arch.equals("amd64") && FilenameUtils.getBaseName(libFile.getName()).endsWith("-linux")) {
                 continue;
             }
-            if (!arch.equals("linux-aarch64") && FilenameUtils.getBaseName(libFile.getName()).endsWith("-linux-aarch64")) {
+            if (!arch.equals("arm64") && FilenameUtils.getBaseName(libFile.getName()).endsWith("-linux-aarch64")) {
                 continue;
             }
             FileUtils.copyFileToFolder(libFile, appLibsFolder);
