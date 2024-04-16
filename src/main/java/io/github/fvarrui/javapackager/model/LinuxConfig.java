@@ -17,6 +17,7 @@ public class LinuxConfig implements Serializable {
 	private boolean generateDeb = true;
 	private boolean generateUosDeb = true;
 	private boolean generateKylinDeb = true;
+	private boolean generateKylinRpm = true;
 	private boolean generateRpm = true;
 	private boolean generateAppImage = true;
 	private File pngFile;
@@ -24,6 +25,14 @@ public class LinuxConfig implements Serializable {
 	private String desktopFile = "desktop.vtl";
 	private String controlFile = "control.vtl";
 	private String infoFile = "info";
+
+	public boolean isGenerateKylinRpm() {
+		return generateKylinRpm;
+	}
+
+	public void setGenerateKylinRpm(boolean generateKylinRpm) {
+		this.generateKylinRpm = generateKylinRpm;
+	}
 
 	public String getInfoFile() {
 		return infoFile;

@@ -30,7 +30,7 @@ public abstract class Context<T> {
 		getInstallerGenerators(Platform.windows).add(new GenerateMsi());
 		getInstallerGenerators(Platform.linux).add(new GenerateUosDeb());
 		getInstallerGenerators(Platform.linux).add(new GeneratekylinDeb());
-
+		getInstallerGenerators(Platform.linux).add(new GeneratekylinRpm());
 	}
 	
 	// common properties
