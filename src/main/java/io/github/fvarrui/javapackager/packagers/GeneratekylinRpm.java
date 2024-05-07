@@ -73,6 +73,7 @@ public class GeneratekylinRpm extends ArtifactGenerator<LinuxPackager> {
         File desktopFile = new File(assetsFolder, name + ".desktop");
         VelocityUtils.render("linux/" + packager.getLinuxConfig().getDesktopFile(), desktopFile, packager);
         Logger.info("Desktop file rendered in " + desktopFile.getAbsolutePath());
+        FileUtils.copyFileToFolder(desktopFile, appFolder);
 
         // generates deb control file from velocity template
         File controlFile = new File(assetsFolder, "control");
@@ -121,13 +122,13 @@ public class GeneratekylinRpm extends ArtifactGenerator<LinuxPackager> {
         executionPermissions.add(new File(appFolder, jreDirectoryName + "/lib/jspawnhelper"));
 
         // add all app files
-        addDirectoryTree(builder, "/opt", appFolder, executionPermissions);
+        addDirectoryTree(builder, "/opt/apps", appFolder, executionPermissions);
 
         // link to desktop file
-        builder.addLink("/usr/share/applications/" + desktopFile.getName(), "/opt/" + name + "/" + desktopFile.getName());
+        builder.addLink("/usr/share/applications/" + desktopFile.getName(), "/opt/apps/" + name + "/" + desktopFile.getName());
 
         // link to binary
-        builder.addLink("/usr/local/bin/" + executable.getName(), "/opt/" + name + "/" + executable.getName());
+        builder.addLink("/usr/local/bin/" + executable.getName(), "/opt/apps/" + name + "/" + executable.getName());
 
         builder.build(outputDirectory);
 

@@ -47,7 +47,8 @@ public class CreateWindowsExeLaunch4j extends AbstractCreateWindowsExe {
 		String jreMinVersion = packager.getJreMinVersion();
 		File jarFile = packager.getJarFile();
 		File appFolder = packager.getAppFolder();
-		
+
+
 		createAssets(packager);
 
 		File proguardFolder = new File(appFolder.getParentFile().getParentFile(), "outlibs");
